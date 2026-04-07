@@ -527,6 +527,17 @@ a { color: var(--primary); text-decoration: none; }
   line-height: 1;
 }
 
+/* Gallery loading state */
+.gallery-loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--soft);
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 2rem 0;
+  animation: heartbeat 1.6s ease-in-out infinite;
+}
+
 /* Photo lightbox */
 .lightbox-overlay {
   position: fixed;

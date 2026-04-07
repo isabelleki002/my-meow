@@ -1,38 +1,38 @@
 // ♡ My Meow — Memory Lane App ♡
-// Maps, photo upload, localStorage, lightbox
+// Photos stored in Supabase — accessible from any device, shared between you both
 
 (function () {
   'use strict';
 
   // ──────────────────────────────────────────────
-  // 1. Storage helpers
+  // 1. Supabase client
   // ──────────────────────────────────────────────
-  function storageKey(countryKey) {
-    return `memory_photos_${countryKey}`;
-  }
-
-  function loadPhotos(countryKey) {
-    try {
-      return JSON.parse(localStorage.getItem(storageKey(countryKey))) || [];
-    } catch {
-      return [];
-    }
-  }
-
-  function savePhotos(countryKey, photos) {
-    localStorage.setItem(storageKey(countryKey), JSON.stringify(photos));
-  }
+  const db = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const BUCKET = 'memories';
 
   // ──────────────────────────────────────────────
-  // 2. Leaflet map initialisation
+  // 2. Helpers
   // ──────────────────────────────────────────────
-  const maps = {};
-
   function formatCoords(coords) {
     const lat = Math.abs(coords[0]).toFixed(4) + '° ' + (coords[0] >= 0 ? 'N' : 'S');
     const lng = Math.abs(coords[1]).toFixed(4) + '° ' + (coords[1] >= 0 ? 'E' : 'W');
     return `${lat}, ${lng}`;
   }
+
+  function getPublicUrl(storagePath) {
+    const { data } = db.storage.from(BUCKET).getPublicUrl(storagePath);
+    return data.publicUrl;
+  }
+
+  function uniquePath(countryKey, file) {
+    const ext = file.name.split('.').pop().toLowerCase();
+    return `${countryKey}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  }
+
+  // ──────────────────────────────────────────────
+  // 3. Leaflet map
+  // ──────────────────────────────────────────────
+  const maps = {};
 
   function createHeartIcon(accentColor) {
     return L.divIcon({
@@ -57,7 +57,6 @@
     }).addTo(map);
 
     const icon = createHeartIcon(countryData.accent);
-
     countryData.places.forEach(place => {
       const popup = L.popup({ maxWidth: 220 }).setContent(`
         <div class="map-popup-name">${place.emoji} ${place.name}</div>
@@ -69,7 +68,6 @@
 
     maps[countryData.key] = map;
 
-    // Fix Leaflet rendering when section becomes visible
     const observer = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting) {
         setTimeout(() => map.invalidateSize(), 100);
@@ -80,64 +78,64 @@
   }
 
   // ──────────────────────────────────────────────
-  // 3. Photo gallery rendering
+  // 4. Photo gallery (async — loads from Supabase)
   // ──────────────────────────────────────────────
-  function renderGallery(countryKey) {
+  async function renderGallery(countryKey) {
     const grid = document.getElementById(`photo-grid-${countryKey}`);
     if (!grid) return;
 
-    const photos = loadPhotos(countryKey);
+    grid.innerHTML = '<div class="gallery-loading">Loading memories... 💕</div>';
+
+    const { data: photos, error } = await db
+      .from('photos')
+      .select('*')
+      .eq('country', countryKey)
+      .order('created_at', { ascending: true });
+
     grid.innerHTML = '';
 
-    photos.forEach((photo, idx) => {
-      const card = document.createElement('div');
-      card.className = 'photo-card';
-      card.innerHTML = `
-        <img src="${photo.dataUrl}" alt="${photo.caption || 'Memory'}" loading="lazy">
-        <div class="photo-caption-overlay">${photo.caption || 'Click to add a caption ✏️'}</div>
-        <button class="photo-delete-btn" data-idx="${idx}" title="Remove photo" aria-label="Remove photo">✕</button>
-      `;
+    if (!error && photos) {
+      photos.forEach(photo => {
+        const url = getPublicUrl(photo.storage_path);
+        const card = document.createElement('div');
+        card.className = 'photo-card';
+        card.dataset.id = photo.id;
+        card.innerHTML = `
+          <img src="${url}" alt="${photo.caption || 'Memory'}" loading="lazy">
+          <div class="photo-caption-overlay">${photo.caption || 'Click to add a caption ✏️'}</div>
+          <button class="photo-delete-btn" title="Remove photo" aria-label="Remove photo">✕</button>
+        `;
 
-      // Open lightbox on image click
-      card.querySelector('img').addEventListener('click', () => {
-        openLightbox(photo.dataUrl, photo.caption);
+        card.querySelector('img').addEventListener('click', () => {
+          openLightbox(url, photo.caption);
+        });
+
+        card.querySelector('.photo-delete-btn').addEventListener('click', e => {
+          e.stopPropagation();
+          if (confirm('Remove this memory? 🥺')) deletePhoto(photo, countryKey);
+        });
+
+        card.querySelector('.photo-caption-overlay').addEventListener('click', e => {
+          e.stopPropagation();
+          openCaptionModal(photo.id, countryKey, photo.caption || '');
+        });
+
+        grid.appendChild(card);
       });
+    }
 
-      // Delete button
-      card.querySelector('.photo-delete-btn').addEventListener('click', e => {
-        e.stopPropagation();
-        if (confirm('Remove this memory? 🥺')) {
-          const updated = loadPhotos(countryKey);
-          updated.splice(idx, 1);
-          savePhotos(countryKey, updated);
-          renderGallery(countryKey);
-        }
-      });
-
-      // Edit caption on overlay click
-      card.querySelector('.photo-caption-overlay').addEventListener('click', e => {
-        e.stopPropagation();
-        openCaptionModal(countryKey, idx, photo.caption || '');
-      });
-
-      grid.appendChild(card);
-    });
-
-    // Always append the "add photo" card at the end
+    // Always show "Add a photo" card at the end
     const addCard = document.createElement('div');
     addCard.className = 'add-photo-card';
     addCard.setAttribute('role', 'button');
     addCard.setAttribute('aria-label', 'Add a photo');
-    addCard.innerHTML = `
-      <span class="add-photo-icon">📷</span>
-      <span>Add a photo</span>
-    `;
+    addCard.innerHTML = `<span class="add-photo-icon">📷</span><span>Add a photo</span>`;
     addCard.addEventListener('click', () => triggerPhotoUpload(countryKey));
     grid.appendChild(addCard);
   }
 
   // ──────────────────────────────────────────────
-  // 4. Photo upload
+  // 5. Photo upload → Supabase Storage
   // ──────────────────────────────────────────────
   function triggerPhotoUpload(countryKey) {
     const input = document.createElement('input');
@@ -145,25 +143,29 @@
     input.accept = 'image/*';
     input.multiple = true;
 
-    input.addEventListener('change', () => {
+    input.addEventListener('change', async () => {
       const files = Array.from(input.files);
       if (!files.length) return;
 
-      const readers = files.map(file => {
-        return new Promise(resolve => {
-          const reader = new FileReader();
-          reader.onload = e => resolve({ dataUrl: e.target.result, caption: '' });
-          reader.readAsDataURL(file);
-        });
-      });
+      // Show uploading indicator
+      const grid = document.getElementById(`photo-grid-${countryKey}`);
+      const addCard = grid ? grid.querySelector('.add-photo-card') : null;
+      if (addCard) {
+        addCard.innerHTML = `<span class="add-photo-icon">⏳</span><span>Uploading ${files.length} photo${files.length > 1 ? 's' : ''}...</span>`;
+        addCard.style.pointerEvents = 'none';
+      }
 
-      Promise.all(readers).then(newPhotos => {
-        const existing = loadPhotos(countryKey);
-        savePhotos(countryKey, [...existing, ...newPhotos]);
-        renderGallery(countryKey);
-      });
+      for (const file of files) {
+        const path = uniquePath(countryKey, file);
+        const { error: uploadError } = await db.storage.from(BUCKET).upload(path, file);
+        if (uploadError) {
+          console.warn('Upload error:', uploadError);
+          continue;
+        }
+        await db.from('photos').insert({ country: countryKey, storage_path: path, caption: '' });
+      }
 
-      // Reset so same file can be re-uploaded
+      await renderGallery(countryKey);
       input.value = '';
     });
 
@@ -171,16 +173,24 @@
   }
 
   // ──────────────────────────────────────────────
-  // 5. Caption modal
+  // 6. Delete photo from Storage + DB
+  // ──────────────────────────────────────────────
+  async function deletePhoto(photo, countryKey) {
+    await db.storage.from(BUCKET).remove([photo.storage_path]);
+    await db.from('photos').delete().eq('id', photo.id);
+    await renderGallery(countryKey);
+  }
+
+  // ──────────────────────────────────────────────
+  // 7. Caption modal
   // ──────────────────────────────────────────────
   let captionModal, captionInput, captionSaveBtn, captionCancelBtn;
 
   function initCaptionModal() {
-    captionModal = document.getElementById('caption-modal');
-    captionInput = document.getElementById('caption-input');
-    captionSaveBtn = document.getElementById('caption-save');
+    captionModal    = document.getElementById('caption-modal');
+    captionInput    = document.getElementById('caption-input');
+    captionSaveBtn  = document.getElementById('caption-save');
     captionCancelBtn = document.getElementById('caption-cancel');
-
     if (!captionModal) return;
 
     captionCancelBtn.addEventListener('click', closeCaptionModal);
@@ -191,20 +201,17 @@
 
   let _captionContext = null;
 
-  function openCaptionModal(countryKey, idx, currentCaption) {
+  function openCaptionModal(photoId, countryKey, currentCaption) {
     if (!captionModal) return;
-    _captionContext = { countryKey, idx };
+    _captionContext = { photoId, countryKey };
     captionInput.value = currentCaption;
     captionModal.classList.add('open');
     setTimeout(() => captionInput.focus(), 50);
 
-    captionSaveBtn.onclick = () => {
-      const photos = loadPhotos(_captionContext.countryKey);
-      if (photos[_captionContext.idx]) {
-        photos[_captionContext.idx].caption = captionInput.value.trim();
-        savePhotos(_captionContext.countryKey, photos);
-        renderGallery(_captionContext.countryKey);
-      }
+    captionSaveBtn.onclick = async () => {
+      const caption = captionInput.value.trim();
+      await db.from('photos').update({ caption }).eq('id', _captionContext.photoId);
+      await renderGallery(_captionContext.countryKey);
       closeCaptionModal();
     };
   }
@@ -215,7 +222,7 @@
   }
 
   // ──────────────────────────────────────────────
-  // 6. Lightbox
+  // 8. Lightbox
   // ──────────────────────────────────────────────
   let lightboxOverlay, lightboxImg, lightboxCaption, lightboxClose;
 
@@ -224,7 +231,6 @@
     lightboxImg     = document.getElementById('lightbox-img');
     lightboxCaption = document.getElementById('lightbox-caption');
     lightboxClose   = document.getElementById('lightbox-close');
-
     if (!lightboxOverlay) return;
 
     lightboxClose.addEventListener('click', closeLightbox);
@@ -249,48 +255,7 @@
   }
 
   // ──────────────────────────────────────────────
-  // 7. Export / Import
-  // ──────────────────────────────────────────────
-  function exportData() {
-    const data = {};
-    Object.keys(COUNTRIES).forEach(key => {
-      data[key] = loadPhotos(key);
-    });
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `our-memory-lane-${new Date().toISOString().split('T')[0]}.json`;
-    a.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-
-  function importData() {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.addEventListener('change', () => {
-      if (!input.files[0]) return;
-      const reader = new FileReader();
-      reader.onload = e => {
-        try {
-          const data = JSON.parse(e.target.result);
-          Object.keys(data).forEach(key => {
-            if (COUNTRIES[key]) savePhotos(key, data[key]);
-          });
-          Object.keys(COUNTRIES).forEach(key => renderGallery(key));
-          alert('Memories imported! 💝');
-        } catch {
-          alert('Hmm, that file didn\'t work. Make sure it\'s a valid export. 🥺');
-        }
-      };
-      reader.readAsText(input.files[0]);
-    });
-    input.click();
-  }
-
-  // ──────────────────────────────────────────────
-  // 8. Build country sections dynamically
+  // 9. Place cards
   // ──────────────────────────────────────────────
   function buildPlaceCards(countryData) {
     return countryData.places.map(place => `
@@ -308,21 +273,17 @@
   }
 
   function buildCountrySection(countryData) {
-    // Use ID directly — more reliable than querySelector inside section
     const placesGrid = document.getElementById(`places-${countryData.key}`);
-    if (placesGrid) {
-      placesGrid.innerHTML = buildPlaceCards(countryData);
-    }
-    renderGallery(countryData.key);
+    if (placesGrid) placesGrid.innerHTML = buildPlaceCards(countryData);
+    renderGallery(countryData.key); // async, self-contained
   }
 
   // ──────────────────────────────────────────────
-  // 9. Scroll-triggered fade-in animations
+  // 10. Scroll animations
   // ──────────────────────────────────────────────
   function initScrollAnimations() {
     const targets = document.querySelectorAll('.country-section, .place-card');
     if (!('IntersectionObserver' in window)) return;
-
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -331,44 +292,30 @@
         }
       });
     }, { threshold: 0.08 });
-
     targets.forEach(el => observer.observe(el));
   }
 
   // ──────────────────────────────────────────────
-  // 10. Init
+  // 11. Init
   // ──────────────────────────────────────────────
   function init() {
-    // Pass 1: render place cards + galleries for every country independently.
-    // Each country is wrapped in its own try-catch so one failure can never
-    // prevent the others from rendering.
+    // Pass 1: place cards + galleries (each country independent)
     Object.values(COUNTRIES).forEach(countryData => {
       try { buildCountrySection(countryData); }
-      catch (e) { console.warn('Place cards failed for', countryData.key, e); }
+      catch (e) { console.warn('Section failed for', countryData.key, e); }
     });
 
-    // Pass 2: initialise maps separately. If Leaflet is unavailable or a
-    // single map throws, the other maps (and all place cards) are unaffected.
+    // Pass 2: maps (isolated so map errors never block place cards)
     Object.values(COUNTRIES).forEach(countryData => {
       try { initMap(countryData); }
-      catch (e) { console.warn('Map init failed for', countryData.key, e); }
+      catch (e) { console.warn('Map failed for', countryData.key, e); }
     });
 
-    // Modals & lightbox
     initCaptionModal();
     initLightbox();
-
-    // Export / Import buttons
-    const exportBtn = document.getElementById('export-btn');
-    const importBtn = document.getElementById('import-btn');
-    if (exportBtn) exportBtn.addEventListener('click', exportData);
-    if (importBtn) importBtn.addEventListener('click', importData);
-
-    // Scroll animations
     initScrollAnimations();
   }
 
-  // Run after DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {

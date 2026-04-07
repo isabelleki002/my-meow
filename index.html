@@ -199,10 +199,6 @@
     <span class="footer-heart">♡</span>
     <p class="footer-message">"Every map tells a love story — this one is ours."</p>
     <p class="footer-sub">Made with love by Isabelle, for Michael &amp; for us 🌏</p>
-    <div class="footer-actions">
-      <button class="btn-outline-white" id="export-btn">💾 Save Memories</button>
-      <button class="btn-outline-white" id="import-btn">📂 Load Memories</button>
-    </div>
   </footer>
 
   <!-- ── CAPTION EDIT MODAL ── -->
@@ -230,11 +226,15 @@
   </div>
 
   <!-- ── SCRIPTS ── -->
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <!-- Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLI=" crossorigin=""></script>
 
-  <!-- Our data & app -->
+  <!-- Our config, data & app -->
+  <script src="config.js"></script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 
