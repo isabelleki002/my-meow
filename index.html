@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Memory Lane ♡ Isabelle & Michael</title>
+  <meta name="description" content="A digital love letter — all the places we've explored together." />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Lato:wght@300;400;700&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+  <!-- Our styles -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ── NAVIGATION ── -->
+  <nav class="nav" aria-label="Main navigation">
+    <span class="nav-brand">Isabelle <span class="hero-heart">♡</span> Michael</span>
+    <ul class="nav-links">
+      <li><a href="#section-malaysia">🇲🇾 Malaysia</a></li>
+      <li><a href="#section-korea">🇰🇷 Korea</a></li>
+      <li><a href="#section-usa">🇺🇸 USA</a></li>
+      <li><a href="#section-hongkong">🇭🇰 Hong Kong</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── HERO ── -->
+  <section id="hero">
+    <p class="hero-eyebrow">✈ our memory lane ✈</p>
+    <h1 class="hero-names">
+      Isabelle <span class="hero-heart">♡</span> Michael
+    </h1>
+    <p class="hero-quote">
+      "Not all those who wander are lost — especially when they wander together."
+    </p>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num">4</div>
+        <div class="hero-stat-label">Countries</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">24</div>
+        <div class="hero-stat-label">Places</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞</div>
+        <div class="hero-stat-label">Memories</div>
+      </div>
+    </div>
+
+    <div class="scroll-hint" aria-hidden="true">
+      <span>Scroll to explore</span>
+      <span class="scroll-arrow">↓</span>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       MALAYSIA
+  ════════════════════════════════════════════ -->
+  <section class="country-section" id="section-malaysia">
+    <div class="section-inner">
+
+      <div class="country-header">
+        <div class="country-flag-badge" style="border: 3px solid #CC0001;">🇲🇾</div>
+        <div class="country-title-block">
+          <div class="country-accent-bar" style="background: #CC0001;"></div>
+          <h2 class="country-title">Malaysia</h2>
+          <p class="country-tagline">Where our adventure first truly bloomed 🌺</p>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container" id="map-malaysia"></div>
+
+      <!-- Places -->
+      <div class="heart-divider"><span class="heart-divider-icon">♡</span></div>
+      <div class="places-grid" id="places-malaysia"></div>
+
+      <!-- Photo Gallery -->
+      <div class="heart-divider"><span class="heart-divider-icon">📷</span></div>
+      <h3 class="gallery-title">
+        <span>Our Malaysia Moments</span>
+        <span style="color: #CC0001;">🌺</span>
+      </h3>
+      <div class="photo-grid" id="photo-grid-malaysia"></div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       SOUTH KOREA
+  ════════════════════════════════════════════ -->
+  <section class="country-section" id="section-korea">
+    <div class="section-inner">
+
+      <div class="country-header">
+        <div class="country-flag-badge" style="border: 3px solid #003478;">🇰🇷</div>
+        <div class="country-title-block">
+          <div class="country-accent-bar" style="background: #003478;"></div>
+          <h2 class="country-title">South Korea</h2>
+          <p class="country-tagline">우리의 이야기 — Our story in the land of morning calm 🌸</p>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container" id="map-korea"></div>
+
+      <!-- Places -->
+      <div class="heart-divider"><span class="heart-divider-icon">♡</span></div>
+      <div class="places-grid" id="places-korea"></div>
+
+      <!-- Photo Gallery -->
+      <div class="heart-divider"><span class="heart-divider-icon">📷</span></div>
+      <h3 class="gallery-title">
+        <span>Our Korea Moments</span>
+        <span style="color: #003478;">🌸</span>
+      </h3>
+      <div class="photo-grid" id="photo-grid-korea"></div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       USA
+  ════════════════════════════════════════════ -->
+  <section class="country-section" id="section-usa">
+    <div class="section-inner">
+
+      <div class="country-header">
+        <div class="country-flag-badge" style="border: 3px solid #3C3B6E;">🇺🇸</div>
+        <div class="country-title-block">
+          <div class="country-accent-bar" style="background: #3C3B6E;"></div>
+          <h2 class="country-title">United States</h2>
+          <p class="country-tagline">From coast to coast, always home in your arms 🗽</p>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container" id="map-usa"></div>
+
+      <!-- Places -->
+      <div class="heart-divider"><span class="heart-divider-icon">♡</span></div>
+      <div class="places-grid" id="places-usa"></div>
+
+      <!-- Photo Gallery -->
+      <div class="heart-divider"><span class="heart-divider-icon">📷</span></div>
+      <h3 class="gallery-title">
+        <span>Our USA Moments</span>
+        <span style="color: #3C3B6E;">🗽</span>
+      </h3>
+      <div class="photo-grid" id="photo-grid-usa"></div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       HONG KONG
+  ════════════════════════════════════════════ -->
+  <section class="country-section" id="section-hongkong">
+    <div class="section-inner">
+
+      <div class="country-header">
+        <div class="country-flag-badge" style="border: 3px solid #DE2910;">🇭🇰</div>
+        <div class="country-title-block">
+          <div class="country-accent-bar" style="background: #DE2910;"></div>
+          <h2 class="country-title">Hong Kong</h2>
+          <p class="country-tagline">城市的燈光，我們的故事 — City lights, our story ✨</p>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="map-container" id="map-hongkong"></div>
+
+      <!-- Places -->
+      <div class="heart-divider"><span class="heart-divider-icon">♡</span></div>
+      <div class="places-grid" id="places-hongkong"></div>
+
+      <!-- Photo Gallery -->
+      <div class="heart-divider"><span class="heart-divider-icon">📷</span></div>
+      <h3 class="gallery-title">
+        <span>Our Hong Kong Moments</span>
+        <span style="color: #DE2910;">✨</span>
+      </h3>
+      <div class="photo-grid" id="photo-grid-hongkong"></div>
+
+    </div>
+  </section>
+
+  <!-- ── FOOTER ── -->
+  <footer>
+    <span class="footer-heart">♡</span>
+    <p class="footer-message">"Every map tells a love story — this one is ours."</p>
+    <p class="footer-sub">Made with love by Isabelle, for Michael &amp; for us 🌏</p>
+    <div class="footer-actions">
+      <button class="btn-outline-white" id="export-btn">💾 Save Memories</button>
+      <button class="btn-outline-white" id="import-btn">📂 Load Memories</button>
+    </div>
+  </footer>
+
+  <!-- ── CAPTION EDIT MODAL ── -->
+  <div class="caption-modal" id="caption-modal" role="dialog" aria-modal="true" aria-label="Edit photo caption">
+    <div class="caption-modal-box">
+      <h3 class="caption-modal-title">✏️ Add a little note...</h3>
+      <textarea
+        class="caption-input"
+        id="caption-input"
+        placeholder="What does this moment mean to you? 💕"
+        rows="3"
+      ></textarea>
+      <div class="caption-modal-actions">
+        <button class="btn btn-ghost" id="caption-cancel">Cancel</button>
+        <button class="btn btn-primary" id="caption-save">Save ♡</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── LIGHTBOX ── -->
+  <div class="lightbox-overlay" id="lightbox-overlay" role="dialog" aria-modal="true" aria-label="Photo viewer">
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close photo viewer">✕</button>
+    <img class="lightbox-img" id="lightbox-img" alt="Memory photo" />
+    <p class="lightbox-caption" id="lightbox-caption"></p>
+  </div>
+
+  <!-- ── SCRIPTS ── -->
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLI=" crossorigin=""></script>
+
+  <!-- Our data & app -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+
+</body>
+</html>
