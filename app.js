@@ -308,19 +308,11 @@
   }
 
   function buildCountrySection(countryData) {
-    const section = document.getElementById(`section-${countryData.key}`);
-    if (!section) return;
-
-    // Place cards
-    const placesGrid = section.querySelector('.places-grid');
+    // Use ID directly — more reliable than querySelector inside section
+    const placesGrid = document.getElementById(`places-${countryData.key}`);
     if (placesGrid) {
       placesGrid.innerHTML = buildPlaceCards(countryData);
     }
-
-    // Map
-    initMap(countryData);
-
-    // Gallery
     renderGallery(countryData.key);
   }
 
@@ -347,8 +339,20 @@
   // 10. Init
   // ──────────────────────────────────────────────
   function init() {
-    // Build all country sections
-    Object.values(COUNTRIES).forEach(buildCountrySection);
+    // Pass 1: render place cards + galleries for every country independently.
+    // Each country is wrapped in its own try-catch so one failure can never
+    // prevent the others from rendering.
+    Object.values(COUNTRIES).forEach(countryData => {
+      try { buildCountrySection(countryData); }
+      catch (e) { console.warn('Place cards failed for', countryData.key, e); }
+    });
+
+    // Pass 2: initialise maps separately. If Leaflet is unavailable or a
+    // single map throws, the other maps (and all place cards) are unaffected.
+    Object.values(COUNTRIES).forEach(countryData => {
+      try { initMap(countryData); }
+      catch (e) { console.warn('Map init failed for', countryData.key, e); }
+    });
 
     // Modals & lightbox
     initCaptionModal();
