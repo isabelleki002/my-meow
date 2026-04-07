@@ -28,6 +28,7 @@
       <li><a href="#section-korea">🇰🇷 Korea</a></li>
       <li><a href="#section-usa">🇺🇸 USA</a></li>
       <li><a href="#section-hongkong">🇭🇰 Hong Kong</a></li>
+      <li><a href="#section-notes" class="nav-notes-link">💌 Notes</a></li>
     </ul>
   </nav>
 
@@ -190,6 +191,47 @@
         <span style="color: #DE2910;">✨</span>
       </h3>
       <div class="photo-grid" id="photo-grid-hongkong"></div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════════════════
+       NOTES
+  ════════════════════════════════════════════ -->
+  <section class="notes-section" id="section-notes">
+    <div class="section-inner">
+
+      <div class="notes-header">
+        <span class="notes-header-icon">💌</span>
+        <div>
+          <h2 class="notes-title">Little Notes</h2>
+          <p class="notes-subtitle">Leave each other something sweet to find ♡</p>
+        </div>
+      </div>
+
+      <!-- Feed -->
+      <div class="notes-feed" id="notes-feed">
+        <div class="notes-empty" id="notes-empty">
+          No notes yet — be the first to leave one 🌸
+        </div>
+      </div>
+
+      <!-- Compose -->
+      <div class="notes-compose">
+        <div class="author-toggle">
+          <button class="author-btn isabelle active" data-author="Isabelle">Isabelle 🌸</button>
+          <button class="author-btn michael" data-author="Michael">Michael 💙</button>
+        </div>
+        <div class="notes-input-row">
+          <textarea
+            id="note-input"
+            class="note-textarea"
+            placeholder="Write a little note... 💕"
+            rows="2"
+          ></textarea>
+          <button class="note-send-btn" id="note-send-btn">Send ♡</button>
+        </div>
+      </div>
 
     </div>
   </section>

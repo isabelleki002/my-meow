@@ -760,6 +760,213 @@ footer {
 }
 
 /* ============================================================
+   NOTES SECTION
+   ============================================================ */
+.notes-section {
+  padding: 80px 2rem;
+  background: linear-gradient(160deg, #FDE8EF 0%, #FDF6F0 60%, #EEF0FF 100%);
+  position: relative;
+}
+
+.notes-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.notes-header-icon {
+  font-size: 2.5rem;
+  line-height: 1;
+  animation: heartbeat 2s ease-in-out infinite;
+}
+
+.notes-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.6rem);
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: 0.2rem;
+}
+
+.notes-subtitle {
+  font-style: italic;
+  color: var(--soft);
+  font-size: 1rem;
+}
+
+/* Feed */
+.notes-feed {
+  max-height: 480px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.25rem 0.25rem 1rem;
+  margin-bottom: 1.5rem;
+  scroll-behavior: smooth;
+}
+
+.notes-feed::-webkit-scrollbar { width: 6px; }
+.notes-feed::-webkit-scrollbar-thumb { background: rgba(212,118,138,0.3); border-radius: 99px; }
+
+.notes-empty {
+  text-align: center;
+  color: var(--soft);
+  font-style: italic;
+  padding: 2.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Note bubble */
+.note-bubble {
+  display: flex;
+  flex-direction: column;
+  max-width: 72%;
+  animation: fadeInUp 0.35s ease both;
+}
+
+.note-bubble.isabelle { align-self: flex-start; }
+.note-bubble.michael  { align-self: flex-end; align-items: flex-end; }
+
+.note-author {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+  padding: 0 0.4rem;
+}
+
+.note-bubble.isabelle .note-author { color: var(--primary); }
+.note-bubble.michael  .note-author { color: #4A6FA5; }
+
+.note-body {
+  padding: 0.85rem 1.1rem;
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text);
+  box-shadow: var(--shadow);
+  position: relative;
+  word-break: break-word;
+}
+
+.note-bubble.isabelle .note-body {
+  background: white;
+  border-left: 3px solid var(--primary);
+}
+
+.note-bubble.michael .note-body {
+  background: white;
+  border-radius: var(--radius) 0 var(--radius) var(--radius);
+  border-right: 3px solid #4A6FA5;
+}
+
+.note-time {
+  font-size: 0.68rem;
+  color: var(--soft);
+  margin-top: 0.3rem;
+  padding: 0 0.4rem;
+  font-family: var(--font-mono);
+}
+
+.note-delete {
+  background: none;
+  border: none;
+  color: rgba(138,117,128,0.4);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  transition: color var(--transition);
+  align-self: flex-end;
+}
+.note-delete:hover { color: var(--primary); }
+
+/* Compose area */
+.notes-compose {
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.author-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.author-btn {
+  padding: 0.4rem 1rem;
+  border-radius: 99px;
+  border: 2px solid transparent;
+  font-size: 0.85rem;
+  font-weight: 700;
+  background: var(--bg);
+  color: var(--soft);
+  transition: all var(--transition);
+  cursor: pointer;
+}
+
+.author-btn.isabelle.active {
+  background: var(--primary-lt);
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.author-btn.michael.active {
+  background: #EEF3FF;
+  color: #4A6FA5;
+  border-color: #4A6FA5;
+}
+
+.notes-input-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.note-textarea {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text);
+  resize: none;
+  outline: none;
+  transition: border-color var(--transition);
+  line-height: 1.5;
+}
+.note-textarea:focus { border-color: var(--primary); }
+
+.note-send-btn {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 99px;
+  padding: 0.6rem 1.4rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(212,118,138,0.4);
+  transition: background var(--transition), transform var(--transition);
+}
+.note-send-btn:hover { background: var(--primary-dk); }
+.note-send-btn:active { transform: scale(0.97); }
+.note-send-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Nav highlight for notes */
+.nav-notes-link {
+  background: var(--primary-lt) !important;
+  color: var(--primary) !important;
+}
+
+/* ============================================================
    RESPONSIVE
    ============================================================ */
 @media (max-width: 768px) {

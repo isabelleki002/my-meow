@@ -255,7 +255,129 @@
   }
 
   // ──────────────────────────────────────────────
-  // 9. Place cards
+  // 9. Notes
+  // ──────────────────────────────────────────────
+  let _selectedAuthor = localStorage.getItem('note_author') || 'Isabelle';
+
+  function formatNoteTime(iso) {
+    const d = new Date(iso);
+    return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+  }
+
+  function renderNote(note) {
+    const who = note.author === 'Isabelle' ? 'isabelle' : 'michael';
+    const bubble = document.createElement('div');
+    bubble.className = `note-bubble ${who}`;
+    bubble.dataset.id = note.id;
+    bubble.innerHTML = `
+      <span class="note-author">${note.author}</span>
+      <div class="note-body">${note.message.replace(/\n/g, '<br>')}</div>
+      <div style="display:flex;align-items:center;gap:0.5rem;">
+        <span class="note-time">${formatNoteTime(note.created_at)}</span>
+        <button class="note-delete" title="Delete note">✕</button>
+      </div>
+    `;
+    bubble.querySelector('.note-delete').addEventListener('click', () => {
+      if (confirm('Delete this note? 🥺')) deleteNote(note.id);
+    });
+    return bubble;
+  }
+
+  async function loadNotes() {
+    const feed = document.getElementById('notes-feed');
+    const empty = document.getElementById('notes-empty');
+    if (!feed) return;
+
+    const { data: notes, error } = await db
+      .from('notes')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    // Clear existing bubbles (keep empty placeholder)
+    Array.from(feed.querySelectorAll('.note-bubble')).forEach(el => el.remove());
+
+    if (!error && notes && notes.length > 0) {
+      if (empty) empty.style.display = 'none';
+      notes.forEach(note => feed.appendChild(renderNote(note)));
+    } else {
+      if (empty) empty.style.display = '';
+    }
+
+    // Scroll to bottom
+    feed.scrollTop = feed.scrollHeight;
+  }
+
+  async function postNote() {
+    const input = document.getElementById('note-input');
+    const btn   = document.getElementById('note-send-btn');
+    const msg   = input ? input.value.trim() : '';
+    if (!msg) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    const { error } = await db.from('notes').insert({
+      author: _selectedAuthor,
+      message: msg
+    });
+
+    if (!error) {
+      input.value = '';
+    } else {
+      console.warn('Note post error:', error);
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Send ♡';
+  }
+
+  async function deleteNote(id) {
+    await db.from('notes').delete().eq('id', id);
+    await loadNotes();
+  }
+
+  function initNotes() {
+    // Author toggle
+    const authorBtns = document.querySelectorAll('.author-btn');
+    authorBtns.forEach(btn => {
+      if (btn.dataset.author === _selectedAuthor) btn.classList.add('active');
+      else btn.classList.remove('active');
+
+      btn.addEventListener('click', () => {
+        _selectedAuthor = btn.dataset.author;
+        localStorage.setItem('note_author', _selectedAuthor);
+        authorBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    // Send on button click
+    const sendBtn = document.getElementById('note-send-btn');
+    if (sendBtn) sendBtn.addEventListener('click', postNote);
+
+    // Send on Ctrl/Cmd+Enter
+    const textarea = document.getElementById('note-input');
+    if (textarea) {
+      textarea.addEventListener('keydown', e => {
+        if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) postNote();
+      });
+    }
+
+    // Load existing notes
+    loadNotes();
+
+    // Real-time: new notes appear instantly on both screens
+    db.channel('notes-channel')
+      .on('postgres_changes', {
+        event: '*',
+        schema: 'public',
+        table: 'notes'
+      }, () => loadNotes())
+      .subscribe();
+  }
+
+  // ──────────────────────────────────────────────
+  // 10. Place cards
   // ──────────────────────────────────────────────
   function buildPlaceCards(countryData) {
     return countryData.places.map(place => `
@@ -313,6 +435,7 @@
 
     initCaptionModal();
     initLightbox();
+    initNotes();
     initScrollAnimations();
   }
 
