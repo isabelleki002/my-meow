@@ -6,23 +6,23 @@ const COUNTRIES = {
     flag: "🇲🇾",
     accent: "#CC0001",
     accentLight: "#FFF0F0",
-    center: [3.8077, 109.4497],
-    zoom: 5,
+    center: [3.1510, 101.7110],
+    zoom: 14,
     tagline: "Where our adventure first truly bloomed 🌺",
     places: [
       {
-        emoji: "🏙️",
-        name: "Petronas Twin Towers",
-        coords: [3.1579, 101.7116],
+        emoji: "🛍️",
+        name: "Sungei Wang Plaza",
+        coords: [3.1469, 101.7107],
         date: "",
-        note: "Standing beneath the twin giants, looking up — and at each other. 💫"
+        note: "A maze of shops, loud music, and you making everything more fun."
       },
       {
-        emoji: "🌿",
-        name: "KLCC Park",
-        coords: [3.1536, 101.7141],
+        emoji: "🏨",
+        name: "Shangri-La Kuala Lumpur",
+        coords: [3.1553, 101.7134],
         date: "",
-        note: "Walking side by side through the park, not wanting the evening to end."
+        note: "Luxury and laughter — the perfect mix with you."
       },
       {
         emoji: "🍜",
@@ -32,25 +32,18 @@ const COUNTRIES = {
         note: "Late-night street food and warm laughter under the neon lights."
       },
       {
-        emoji: "🌅",
-        name: "Penang Hill",
-        coords: [5.4164, 100.2688],
+        emoji: "🐱",
+        name: "Animal Cafe",
+        coords: [3.1495, 101.7120],
         date: "",
-        note: "The view from the top was breathtaking — almost as breathtaking as you."
+        note: "Tiny paws and big smiles — adding the exact spot soon! 📍"
       },
       {
-        emoji: "🏖️",
-        name: "Langkawi Island",
-        coords: [6.3500, 99.8000],
+        emoji: "🍣",
+        name: "Nobu KL",
+        coords: [3.1562, 101.7130],
         date: "",
-        note: "Crystal waters and endless horizon. Add your memory here..."
-      },
-      {
-        emoji: "🕌",
-        name: "Batu Caves",
-        coords: [3.2379, 101.6840],
-        date: "",
-        note: "272 steps hand in hand. Worth every single one."
+        note: "Fine dining and finer company. Every bite was a moment."
       }
     ]
   },
@@ -61,51 +54,51 @@ const COUNTRIES = {
     flag: "🇰🇷",
     accent: "#003478",
     accentLight: "#EEF3FF",
-    center: [36.5, 127.5],
-    zoom: 6,
+    center: [37.5300, 126.9780],
+    zoom: 11,
     tagline: "우리의 이야기 — Our story in the land of morning calm 🌸",
     places: [
       {
-        emoji: "🏯",
-        name: "Gyeongbokgung Palace",
-        coords: [37.5796, 126.9770],
+        emoji: "🌟",
+        name: "Gwanak-gu, Seoul",
+        coords: [37.4785, 126.9516],
         date: "",
-        note: "In matching hanboks, feeling like characters from a love story. We basically were. 👘"
-      },
-      {
-        emoji: "🌸",
-        name: "Bukchon Hanok Village",
-        coords: [37.5826, 126.9830],
-        date: "",
-        note: "Wandering the narrow alleyways at golden hour — pure magic."
-      },
-      {
-        emoji: "🗼",
-        name: "N Seoul Tower (Namsan)",
-        coords: [37.5512, 126.9882],
-        date: "",
-        note: "Our lock is on that tower. Our love is locked in forever. 🔐"
+        note: "Where it all began. 💙"
       },
       {
         emoji: "🛍️",
         name: "Myeongdong",
         coords: [37.5636, 126.9827],
         date: "",
-        note: "Tteokbokki, street snacks, and too many skincare products. 10/10."
+        note: "Late nights shopping with you."
       },
       {
-        emoji: "🍑",
-        name: "Jeju Island",
-        coords: [33.4890, 126.4983],
+        emoji: "✈️",
+        name: "Incheon Airport",
+        coords: [37.4602, 126.4407],
         date: "",
-        note: "The most beautiful island with the most beautiful person. Add your memory here..."
+        note: "Where we said our first hello."
       },
       {
-        emoji: "🌊",
-        name: "Haeundae Beach, Busan",
-        coords: [35.1587, 129.1604],
+        emoji: "🍲",
+        name: "Yeongdeungpo Market",
+        coords: [37.5157, 126.9068],
         date: "",
-        note: "Watching the waves together, nowhere else we'd rather be."
+        note: "Best sundae stew of your life."
+      },
+      {
+        emoji: "👖",
+        name: "Dongmyo Flea Market",
+        coords: [37.5726, 127.0164],
+        date: "",
+        note: "Fire jeans & 1500 won makgeolli. 🍶"
+      },
+      {
+        emoji: "🍷",
+        name: "Onyva Restaurant",
+        coords: [37.5347, 126.9948],
+        date: "",
+        note: "Michelin guide laughter. ✨"
       }
     ]
   },
@@ -116,51 +109,44 @@ const COUNTRIES = {
     flag: "🇺🇸",
     accent: "#3C3B6E",
     accentLight: "#F0F0FF",
-    center: [39.5, -98.35],
-    zoom: 4,
-    tagline: "From coast to coast, always home in your arms 🗽",
+    center: [40.7300, -73.9300],
+    zoom: 12,
+    tagline: "New York, always home in your arms 🗽",
     places: [
       {
-        emoji: "🗽",
-        name: "New York City",
-        coords: [40.7128, -74.0060],
+        emoji: "🥟",
+        name: "Flushing, Queens",
+        coords: [40.7577, -73.8330],
         date: "",
-        note: "The city that never sleeps — neither did we, we were too excited. 🌃"
+        note: "A mini China — dim sum, bubble tea, and wandering with you."
+      },
+      {
+        emoji: "🏨",
+        name: "Wingate by Wyndham LIC",
+        coords: [40.7448, -73.9483],
+        date: "",
+        note: "Worst hotel, but best vibes with you by my side. 😂❤️"
+      },
+      {
+        emoji: "🍵",
+        name: "Kijitora, Brooklyn",
+        coords: [40.7041, -73.9867],
+        date: "",
+        note: "Expensive Brooklyn matcha, and cute tote bags."
       },
       {
         emoji: "🌉",
-        name: "Golden Gate Bridge, San Francisco",
-        coords: [37.8199, -122.4783],
+        name: "Dumbo, Brooklyn",
+        coords: [40.7033, -73.9903],
         date: "",
-        note: "Foggy, cold, and completely perfect. Add your memory here..."
+        note: "Where we looked into each other's eyes in silence and knew we were right where we wanted to be. 🤍"
       },
       {
-        emoji: "🎡",
-        name: "Santa Monica Pier, LA",
-        coords: [34.0098, -118.4975],
+        emoji: "🥘",
+        name: "East Village",
+        coords: [40.7265, -73.9815],
         date: "",
-        note: "Cotton candy, the Ferris wheel, and your hand in mine."
-      },
-      {
-        emoji: "🌵",
-        name: "Grand Canyon",
-        coords: [36.1069, -112.1129],
-        date: "",
-        note: "Standing at the edge of something enormous — just like this love. Add your memory here..."
-      },
-      {
-        emoji: "🎶",
-        name: "Nashville, Tennessee",
-        coords: [36.1627, -86.7816],
-        date: "",
-        note: "Live music, honky-tonks, and slow dancing. Add your memory here..."
-      },
-      {
-        emoji: "🏙️",
-        name: "Chicago",
-        coords: [41.8781, -87.6298],
-        date: "",
-        note: "The Bean, the deep dish, the wind — and us. Add your memory here..."
+        note: "Walking 30 minutes to a really good Ukrainian restaurant hand-in-hand."
       }
     ]
   },
@@ -171,51 +157,44 @@ const COUNTRIES = {
     flag: "🇭🇰",
     accent: "#DE2910",
     accentLight: "#FFF0EF",
-    center: [22.3193, 114.1694],
-    zoom: 11,
-    tagline: "城市的燈光，我們的故事 — City lights, our story ✨",
+    center: [22.3080, 114.1750],
+    zoom: 13,
+    tagline: "Places we'll soon go together ✈️🤍",
     places: [
       {
-        emoji: "🏔️",
-        name: "Victoria Peak",
-        coords: [22.2759, 114.1455],
-        date: "",
-        note: "The whole city glittered below us like it was celebrating us. 🌃"
-      },
-      {
-        emoji: "🛳️",
-        name: "Star Ferry Pier",
-        coords: [22.2937, 114.1694],
-        date: "",
-        note: "Crossing the harbour as the sky turned pink. Timeless."
-      },
-      {
-        emoji: "🌃",
-        name: "Tsim Sha Tsui Promenade",
-        coords: [22.2942, 114.1722],
-        date: "",
-        note: "The Symphony of Lights show — but honestly you were the best view."
-      },
-      {
-        emoji: "🍢",
+        emoji: "🌙",
         name: "Temple Street Night Market",
         coords: [22.3066, 114.1694],
         date: "",
-        note: "Dim sum, egg waffles, and getting delightfully lost together."
+        note: "Neon lights, fortune tellers, and street food for two."
       },
       {
-        emoji: "🏝️",
-        name: "Lantau Island & Big Buddha",
-        coords: [22.2540, 113.9050],
+        emoji: "🌊",
+        name: "Kennedy Town New Praya",
+        coords: [22.2816, 114.1277],
         date: "",
-        note: "Cable car views and peaceful mountain air. Add your memory here..."
+        note: "A quiet promenade at the edge of the city — our kind of evening."
       },
       {
         emoji: "🛍️",
-        name: "Mong Kok",
-        coords: [22.3193, 114.1694],
+        name: "Argyle Street Market, Mong Kok",
+        coords: [22.3219, 114.1704],
         date: "",
-        note: "Busy, loud, full of life — kind of like us. Add your memory here..."
+        note: "The best finds in the most chaotic, wonderful streets."
+      },
+      {
+        emoji: "🏮",
+        name: "Yau Ma Tei",
+        coords: [22.3120, 114.1714],
+        date: "",
+        note: "Old Hong Kong soul — jade markets, dim sum, and slow mornings."
+      },
+      {
+        emoji: "🎡",
+        name: "AIA Carnival",
+        coords: [22.2822, 114.1868],
+        date: "",
+        note: "Ferris wheels, carnival games, and making memories with you."
       }
     ]
   }
