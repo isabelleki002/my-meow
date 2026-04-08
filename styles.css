@@ -760,6 +760,143 @@ footer {
 }
 
 /* ============================================================
+   REASONS SECTION
+   ============================================================ */
+.reasons-section {
+  padding: 80px 2rem;
+  background: var(--bg);
+}
+
+.reasons-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.reasons-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 0.6rem;
+}
+
+.reasons-title {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: clamp(2rem, 5vw, 3rem);
+  color: var(--primary);
+  margin-bottom: 0.35rem;
+  text-shadow: 2px 4px 16px rgba(212,118,138,0.15);
+}
+
+.reasons-subtitle {
+  font-style: italic;
+  color: var(--soft);
+  font-size: 0.95rem;
+}
+
+/* Grid */
+.reasons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2.5rem;
+}
+
+.reasons-empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  color: var(--soft);
+  font-style: italic;
+  padding: 2.5rem 0;
+  font-size: 0.95rem;
+}
+
+/* Reason card */
+.reason-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.25rem 1rem;
+  box-shadow: var(--shadow);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: fadeInUp 0.4s ease both;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.reason-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-hover);
+}
+
+.reason-card.isabelle { border-top: 3px solid var(--primary); }
+.reason-card.michael  { border-top: 3px solid #4A6FA5; }
+
+.reason-number {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  color: var(--gold);
+}
+
+.reason-text {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--text);
+  line-height: 1.6;
+  flex: 1;
+}
+
+.reason-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+}
+
+.reason-author-tag {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.reason-card.isabelle .reason-author-tag { color: var(--primary); }
+.reason-card.michael  .reason-author-tag { color: #4A6FA5; }
+
+.reason-delete {
+  background: none;
+  border: none;
+  font-size: 0.68rem;
+  color: rgba(138,117,128,0.35);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition);
+}
+.reason-delete:hover { color: var(--primary); }
+
+/* Compose */
+.reasons-compose {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.reasons-input-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+/* ============================================================
    PLAYLIST SECTION
    ============================================================ */
 .playlist-section {

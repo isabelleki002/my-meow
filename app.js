@@ -255,7 +255,104 @@
   }
 
   // ──────────────────────────────────────────────
-  // 9. Notes
+  // 9. Reasons
+  // ──────────────────────────────────────────────
+  let _reasonAuthor = localStorage.getItem('reason_author') || 'Isabelle';
+
+  async function loadReasons() {
+    const grid  = document.getElementById('reasons-grid');
+    const empty = document.getElementById('reasons-empty');
+    if (!grid) return;
+
+    const { data: reasons, error } = await db
+      .from('reasons')
+      .select('*')
+      .order('created_at', { ascending: true });
+
+    Array.from(grid.querySelectorAll('.reason-card')).forEach(el => el.remove());
+
+    if (!error && reasons && reasons.length > 0) {
+      if (empty) empty.style.display = 'none';
+      reasons.forEach((r, i) => {
+        const who  = r.author === 'Isabelle' ? 'isabelle' : 'michael';
+        const num  = String(i + 1).padStart(3, '0');
+        const card = document.createElement('div');
+        card.className = `reason-card ${who}`;
+        card.dataset.id = r.id;
+        card.innerHTML = `
+          <span class="reason-number">${num}</span>
+          <p class="reason-text">${r.reason.replace(/\n/g, '<br>')}</p>
+          <div class="reason-footer">
+            <span class="reason-author-tag">— ${r.author}</span>
+            <button class="reason-delete" title="Delete">✕</button>
+          </div>
+        `;
+        card.querySelector('.reason-delete').addEventListener('click', () => {
+          if (confirm('Remove this reason? 🥺')) deleteReason(r.id);
+        });
+        grid.appendChild(card);
+      });
+    } else {
+      if (empty) empty.style.display = '';
+    }
+  }
+
+  async function postReason() {
+    const input = document.getElementById('reason-input');
+    const btn   = document.getElementById('reason-send-btn');
+    const msg   = input ? input.value.trim() : '';
+    if (!msg) return;
+
+    btn.disabled = true;
+    btn.textContent = 'Adding...';
+
+    const { error } = await db.from('reasons').insert({ author: _reasonAuthor, reason: msg });
+    if (!error) input.value = '';
+    else console.warn('Reason post error:', error);
+
+    btn.disabled = false;
+    btn.textContent = 'Add ♡';
+  }
+
+  async function deleteReason(id) {
+    await db.from('reasons').delete().eq('id', id);
+    await loadReasons();
+  }
+
+  function initReasons() {
+    // Author toggle (reuses same author-btn styles)
+    const btns = [
+      document.getElementById('reason-author-isabelle'),
+      document.getElementById('reason-author-michael')
+    ].filter(Boolean);
+
+    btns.forEach(btn => {
+      if (btn.dataset.author === _reasonAuthor) btn.classList.add('active');
+      btn.addEventListener('click', () => {
+        _reasonAuthor = btn.dataset.author;
+        localStorage.setItem('reason_author', _reasonAuthor);
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+
+    const sendBtn  = document.getElementById('reason-send-btn');
+    const textarea = document.getElementById('reason-input');
+    if (sendBtn)  sendBtn.addEventListener('click', postReason);
+    if (textarea) textarea.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) postReason();
+    });
+
+    loadReasons();
+
+    // Real-time
+    db.channel('reasons-channel')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'reasons' }, () => loadReasons())
+      .subscribe();
+  }
+
+  // ──────────────────────────────────────────────
+  // 10. Notes
   // ──────────────────────────────────────────────
   let _selectedAuthor = localStorage.getItem('note_author') || 'Isabelle';
 
@@ -435,6 +532,7 @@
 
     initCaptionModal();
     initLightbox();
+    initReasons();
     initNotes();
     initScrollAnimations();
   }
