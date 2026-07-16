@@ -255,7 +255,26 @@
   }
 
   // ──────────────────────────────────────────────
-  // 9. Reasons
+  // ──────────────────────────────────────────────
+  // 9. 100 Reasons
+  // ──────────────────────────────────────────────
+  function initHundredReasons() {
+    const grid = document.getElementById('hundred-grid');
+    if (!grid) return;
+    for (let i = 1; i <= 100; i++) {
+      const num  = String(i).padStart(3, '0');
+      const card = document.createElement('div');
+      card.className = 'hundred-card empty';
+      card.innerHTML = `
+        <span class="hundred-num">${num}</span>
+        <p class="hundred-text">coming soon... 🌸</p>
+      `;
+      grid.appendChild(card);
+    }
+  }
+
+  // ──────────────────────────────────────────────
+  // 9. Reasons (shared)
   // ──────────────────────────────────────────────
   let _reasonAuthor = localStorage.getItem('reason_author') || 'Isabelle';
 
@@ -532,6 +551,7 @@
 
     initCaptionModal();
     initLightbox();
+    initHundredReasons();
     initReasons();
     initNotes();
     initScrollAnimations();
