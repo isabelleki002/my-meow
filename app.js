@@ -261,16 +261,16 @@
   function initHundredReasons() {
     const grid = document.getElementById('hundred-grid');
     if (!grid) return;
-    for (let i = 1; i <= 100; i++) {
-      const num  = String(i).padStart(3, '0');
+    HUNDRED_REASONS.forEach((reason, i) => {
+      const num  = String(i + 1).padStart(3, '0');
       const card = document.createElement('div');
-      card.className = 'hundred-card empty';
+      card.className = 'hundred-card';
       card.innerHTML = `
         <span class="hundred-num">${num}</span>
-        <p class="hundred-text">coming soon... 🌸</p>
+        <p class="hundred-text">${reason}</p>
       `;
       grid.appendChild(card);
-    }
+    });
   }
 
   // ──────────────────────────────────────────────
